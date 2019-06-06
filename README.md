@@ -38,6 +38,7 @@ memes = [
     ('dolan.jpg', 126, 6),
     ('sad_pepe.png', 221, 10),
     ('t-series.avi', 522, 12),
+    ('dat_boi.gif', 601, 16)
 ]
 ```
 
@@ -48,7 +49,7 @@ calculate(usb_size, memes)
 ```
 And output would give us this:
 ```
-(28, {'dolan.jpg', 't-series.avi', 'sad_pepe.png'})
+(32, {'dat_boi.gif', 'dolan.jpg', 'sad_pepe.png'})
 ```
 
 Perfect memes of the best possible value!

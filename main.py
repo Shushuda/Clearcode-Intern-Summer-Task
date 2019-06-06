@@ -4,7 +4,7 @@ import numpy
 
 # function for calculating the max possible value of a set of digital items that can fit on a given usb stick
 # returns a tuple containing the max possible value and a set of memes' names used to achieve that value
-def calculate(usb_size: int, memes: List[Tuple[str, int, int]]) -> tuple:
+def calculate(usb_size: int, memes: List[Tuple[str, int, int]]) -> Tuple[int, set]:
     # conversion of variable 'usb_size' to int in case of a type mismatch
     # throws an exception if the variable cannot be converted
     try:
@@ -12,21 +12,23 @@ def calculate(usb_size: int, memes: List[Tuple[str, int, int]]) -> tuple:
     except ValueError:
         raise ValueError(f"Couldn't convert usb_size: '{usb_size}' to int.")
 
-    # checks if the variable 'memes' is the correct type and contains the correct values
-    # accepts lists instead of tuples due to the results being the same with both types
-    # accepts str instead of int due to the following code converting it to int anyway (just in case)
+    # checks if the variable 'memes' is the correct type
     if type(memes) is not list:
         raise TypeError("memes is not a list.")
-    if not all(isinstance(meme, (tuple, list)) for meme in memes):
-        raise TypeError("Values inside a list are not tuples.")
-    if not all(all(isinstance(value, (str, int)) for value in meme) for meme in memes):
-        raise TypeError("Values inside a tuple are not str nor int.")
 
     # checks for the number of values inside a meme
     # allows only exactly 3 elements (name, size, price)
+    # also checks if the types are correct
     for meme in memes:
-        if len(meme) != 3:
+        # accepts lists instead of tuples due to the results being the same with both types
+        if not isinstance(meme, (tuple, list)):
+            raise TypeError("Values inside a list are not tuples.")
+        elif len(meme) != 3:
             raise ValueError("Too many or too few values inside a tuple.")
+        elif type(meme[0]) is not str:
+            raise TypeError("First value inside a tuple is not a str.")
+        elif type(meme[1]) is not int or type(meme[2]) is not int:
+            raise TypeError("Values inside a tuple are not an int.")
 
     item_num = len(memes)
 
@@ -40,11 +42,11 @@ def calculate(usb_size: int, memes: List[Tuple[str, int, int]]) -> tuple:
     while item <= item_num:
         usb = 0
         while usb <= usb_size:
-            if memes[item - 1][1] > usb:
+            if int(memes[item - 1][1]) > usb:
                 matrix[item][usb] = matrix[item - 1][usb]
             else:
-                matrix[item][usb] = max(matrix[item - 1][usb], matrix[item - 1][usb - memes[item - 1][1]]
-                                        + memes[item - 1][2])
+                matrix[item][usb] = max(matrix[item - 1][usb], matrix[item - 1][usb - int(memes[item - 1][1])]
+                                        + int(memes[item - 1][2]))
 
             usb += 1
 
@@ -61,8 +63,8 @@ def calculate(usb_size: int, memes: List[Tuple[str, int, int]]) -> tuple:
     while i > 0 and result > 0:
         if result != matrix[i - 1][capacity]:
             meme.add(str(memes[i - 1][0]))
-            result -= memes[i - 1][2]
-            capacity -= memes[i - 1][1]
+            result -= int(memes[i - 1][2])
+            capacity -= int(memes[i - 1][1])
         i -= 1
 
     # solution consisting of a tuple with the total value of the memes used and a set of names of the used memes

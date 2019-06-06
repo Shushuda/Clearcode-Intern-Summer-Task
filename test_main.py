@@ -72,6 +72,8 @@ class TestMain(unittest.TestCase):
         expected = (32, {'dolan.jpg', 'smutna_zaba.png', 'scotish_pokemon.gif'})
         result = main.calculate(capacity_data, items_data)
 
+        self.assertEqual(expected, result)
+
     def test_calculate_wrong_type_memes(self):
         """
         Test that the function reacts correctly to a list of wrong types data that should be a list(tuple)
@@ -89,7 +91,7 @@ class TestMain(unittest.TestCase):
         with self.assertRaises(TypeError):
             main.calculate(capacity_data, items_data)
 
-    def test_calculate_wrong_type_inside_memes(self):
+    def test_calculate_float_type_inside_memes(self):
         """
         Test that the function reacts correctly to a list/tuple of wrong types data that should be str or int.
         """
@@ -98,7 +100,7 @@ class TestMain(unittest.TestCase):
             ['smutna_zaba.png', 221, 10],
             ['t-series.avi', 52.2, 12],
             ['dank.png', 20.5, 8],
-            ['scotish_pokemon.gif', 601, 16]
+            ['scotish_pokemon.gif', 60.1, 1.6]
         ]
         capacity_data = 1
 
@@ -111,7 +113,7 @@ class TestMain(unittest.TestCase):
         """
         items_data = [
             ['dolan.jpg', 126, 6],
-            ['smutna_zaba.png', 221, 10, 'fdsf'],
+            ['smutna_zaba.png', 221, 10, 1245],
             ['t-series.avi', 522, 1563, 12],
             ['dank.png', 205, 8],
             ['scotish_pokemon.gif', 601, 16]
@@ -135,6 +137,22 @@ class TestMain(unittest.TestCase):
         capacity_data = 1
 
         with self.assertRaises(ValueError):
+            main.calculate(capacity_data, items_data)
+
+    def test_calculate_string_type_inside_memes(self):
+        """
+        Test that the function reacts correctly to a list/tuple of String types data.
+        """
+        items_data = [
+            ['dolan.jpg', 126, 6],
+            ['smutna_zaba.png', 221, 10],
+            ['t-series.avi', 522, '1f2'],
+            ['dank.png', '205', 8],
+            ['scotish_pokemon.gif', '601', '16']
+        ]
+        capacity_data = 1
+
+        with self.assertRaises(TypeError):
             main.calculate(capacity_data, items_data)
 
 
